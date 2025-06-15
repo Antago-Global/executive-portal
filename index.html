@@ -956,12 +956,81 @@
         let isAuthenticated = false;
         let currentSlideIndex = 0;
         
-        // Simple authentication (replace with actual Zoho authentication)
-        const validCredentials = {
-            'exec1': 'antago2025',
-            'exec2': 'strategic2025',
-            'leadership': 'global2025'
+        // Encoded credentials for security (base64 encoded)
+        const encodedCredentials = {
+            // exec1 : antago2025
+            'ZXhlYzE=': 'YW50YWdvMjAyNQ==',
+            // exec2 : strategic2025  
+            'ZXhlYzI=': 'c3RyYXRlZ2ljMjAyNQ==',
+            // leadership : global2025
+            'bGVhZGVyc2hpcA==': 'Z2xvYmFsMjAyNQ=='
         };
+
+        // Function to decode credentials
+        function decodeCredentials() {
+            const decoded = {};
+            for (let [encodedUser, encodedPass] of Object.entries(encodedCredentials)) {
+                const user = atob(encodedUser);
+                const pass = atob(encodedPass);
+                decoded[user] = pass;
+            }
+            return decoded;
+        }
+
+        // Function to add new executive (use this to add new people)
+        function addExecutive(name, accessCode) {
+            const encodedName = btoa(name.toLowerCase().replace(/\s+/g, ''));
+            const encodedCode = btoa(accessCode);
+            encodedCredentials[encodedName] = encodedCode;
+            console.log(`Added: ${name} -> ID: ${name.toLowerCase().replace(/\s+/g, '')}`);
+        }
+
+        // Executive names mapping (encoded)
+        const executiveNames = {
+            // exec1 : Executive One
+            'ZXhlYzE=': 'RXhlY3V0aXZlIE9uZQ==',
+            // exec2 : Executive Two
+            'ZXhlYzI=': 'RXhlY3V0aXZlIFR3bw==',
+            // leadership : Leadership Team
+            'bGVhZGVyc2hpcA==': 'TGVhZGVyc2hpcCBUZWFt'
+        };
+
+        // Helper function to easily add new executives
+        function addNewExecutive(fullName, accessCode) {
+            // Create executive ID from name (remove spaces, lowercase)
+            const execId = fullName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+            
+            // Encode and add to credentials
+            const encodedId = btoa(execId);
+            const encodedCode = btoa(accessCode);
+            const encodedName = btoa(fullName);
+            
+            encodedCredentials[encodedId] = encodedCode;
+            executiveNames[encodedId] = encodedName;
+            
+            console.log(`✅ Added Executive:`);
+            console.log(`   Name: ${fullName}`);
+            console.log(`   Executive ID: ${execId}`);
+            console.log(`   Access Code: ${accessCode}`);
+            
+            return { name: fullName, id: execId, code: accessCode };
+        }
+
+        // ⭐ ADD NEW EXECUTIVES HERE ⭐
+        // Adding the 4 new executives
+        addNewExecutive("Amer Zulfiqar", "amer2025");
+        addNewExecutive("Aaminah Ramzan", "aaminah2025");
+        addNewExecutive("Suad Sultan", "suad2025");
+        addNewExecutive("Kurt Bartholomaeus", "chairman2025");
+        
+        // Example: addNewExecutive("John Smith", "smith2025");
+        // Example: addNewExecutive("Sarah Johnson", "johnson2025");
+        
+        function getExecutiveName(username) {
+            const encodedUsername = btoa(username);
+            const encodedName = executiveNames[encodedUsername];
+            return encodedName ? atob(encodedName) : username.toUpperCase();
+        }
 
         // Handle sign-in
         document.getElementById('signinForm').addEventListener('submit', function(e) {
@@ -970,10 +1039,14 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
+            // Get decoded credentials for authentication
+            const validCredentials = decodeCredentials();
+            
             if (validCredentials[username] === password) {
                 isAuthenticated = true;
                 showDashboard();
-                document.getElementById('userInfo').textContent = `Welcome, ${username.toUpperCase()}`;
+                const displayName = getExecutiveName(username);
+                document.getElementById('userInfo').textContent = `Welcome, ${displayName}`;
                 document.getElementById('userMenu').classList.add('show');
             } else {
                 alert('Invalid credentials. Please contact administrator.');
