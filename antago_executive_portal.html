@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antago Global - Executive Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #d4af37;
+            --primary-dark: #1e293b;
+            --secondary-gray: #64748b;
+            --light-gray: #f8fafc;
+            --white: #ffffff;
+            --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #e2e8f0 100%);
+            color: var(--primary-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === COMMON COMPONENTS === */
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-gold) 0%, #f4d03f 100%);
+            color: var(--primary-dark);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary-dark);
+            border: 2px solid var(--primary-gold);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-gold);
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .luxury-divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+            margin: 20px auto;
+        }
+
+        /* === HEADER === */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: var(--shadow-light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-gold);
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .user-menu {
+            display: none;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-menu.show {
+            display: flex;
+        }
+
+        .user-info {
+            font-size: 0.9rem;
+            color: var(--secondary-gray);
+        }
+
+        /* === SIGN-IN PAGE === */
+        .signin-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: 
+                linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(30, 41, 59, 0.7) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(212,175,55,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+        }
+
+        .signin-container {
+            background: var(--white);
+            padding: 60px 50px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-heavy);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .signin-container h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+            font-weight: 300;
+        }
+
+        .signin-container .subtitle {
+            color: var(--secondary-gray);
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .signin-btn {
+            width: 100%;
+            margin-top: 30px;
+            padding: 16px;
+            font-size: 1rem;
+        }
+
+        .security-note {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary-gold);
+        }
+
+        .security-note p {
+            font-size: 0.85rem;
+            color: var(--secondary-gray);
+            margin: 0;
+        }
+
+        /* === DASHBOARD === */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .dashboard.show {
+            display: block;
+        }
+
+        .dashboard-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+
+        .welcome-section {
+            background: var(--white);
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-medium);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.8rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-gold) 50%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-section .subtitle {
+            font-size: 1.1rem;
+            color: var(--secondary-gray);
+            margin-bottom: 30px;
+        }
+
+        .exclusivity-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-gold) 0%, #f4d03f 100%);
+            color: var(--primary-dark);
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* === NAVIGATION CARDS === */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .nav-card {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-medium);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-gold);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .nav-card .icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-gold) 0%, #f4d03f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .nav-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .nav-card p {
+            color: var(--secondary-gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* === PRESENTATION VIEWER === */
+        .presentation-viewer {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .presentation-viewer.show {
+            display: block;
+        }
+
+        .presentation-header {
+            background: var(--white);
+            padding: 30px 40px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 30px;
+        }
+
+        .presentation-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .presentation-title {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .presentation-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .slide-counter {
+            background: var(--light-gray);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+
+        .fullscreen-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* === DOCUMENT LIBRARY === */
+        .document-library {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .document-library.show {
+            display: block;
+        }
+
+        .library-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+
+        .library-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .library-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .document-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .document-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .document-card h4 {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .document-card p {
+            color: var(--secondary-gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .document-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: var(--secondary-gray);
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 20px;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .signin-container {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+            
+            .signin-container h1 {
+                font-size: 1.8rem;
+            }
+            
+            .dashboard-content {
+                padding: 30px 20px;
+            }
+            
+            .welcome-section {
+                padding: 40px 25px;
+            }
+            
+            .welcome-section h1 {
+                font-size: 2.2rem;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .nav-card {
+                padding: 30px 25px;
+            }
+            
+            .presentation-header {
+                padding: 20px 25px;
+            }
+            
+            .presentation-header-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .presentation-title {
+                font-size: 1.4rem;
+            }
+            
+            .fullscreen-content {
+                padding: 0 20px;
+            }
+            
+            .library-content {
+                padding: 30px 20px;
+            }
+            
+            .documents-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .signin-container {
+                padding: 30px 20px;
+            }
+            
+            .welcome-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .nav-card {
+                padding: 25px 20px;
+            }
+            
+            .document-card {
+                padding: 25px 20px;
+            }
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">ANTAGO</a>
+            <div class="user-menu" id="userMenu">
+                <span class="user-info" id="userInfo">Welcome, Executive</span>
+                <button class="btn btn-secondary" onclick="signOut()">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sign-In Page -->
+    <div class="signin-page" id="signinPage">
+        <div class="signin-container fade-in-up">
+            <h1>ANTAGO GLOBAL</h1>
+            <p class="subtitle">Executive Portal Access</p>
+            <div class="luxury-divider"></div>
+            
+            <form id="signinForm">
+                <div class="form-group">
+                    <label for="username">Executive ID</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Access Code</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary signin-btn">
+                    Access Private Office
+                </button>
+            </form>
+            
+            <div class="security-note">
+                <p><strong>Confidential Access:</strong> This portal contains proprietary strategic information. Unauthorized access is prohibited.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-content">
+            <div class="welcome-section fade-in-up">
+                <h1>Private Office Strategic Framework</h1>
+                <p class="subtitle">Principal Capital. Strategic Partnerships. Global Excellence.</p>
+                <div class="luxury-divider"></div>
+                <div class="exclusivity-badge">Ultra-High-Net-Worth Platform</div>
+            </div>
+            
+            <div class="nav-grid">
+                <div class="nav-card slide-in" onclick="showPresentation()">
+                    <div class="icon">📊</div>
+                    <h3>Strategic Presentation</h3>
+                    <p>Interactive presentation of our three-pillar framework and institutional-scale opportunities</p>
+                </div>
+                
+                <div class="nav-card slide-in" onclick="showDocuments()">
+                    <div class="icon">📋</div>
+                    <h3>Document Library</h3>
+                    <p>Access strategic frameworks, competitive analysis, and confidential planning documents</p>
+                </div>
+                
+                <div class="nav-card slide-in" onclick="showAnalytics()">
+                    <div class="icon">📈</div>
+                    <h3>Market Analytics</h3>
+                    <p>Real-time market positioning and competitive landscape analysis</p>
+                </div>
+                
+                <div class="nav-card slide-in" onclick="showNetworking()">
+                    <div class="icon">🌐</div>
+                    <h3>Network Platform</h3>
+                    <p>Global relationship management and partnership development tools</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Presentation Viewer -->
+    <div class="presentation-viewer" id="presentationViewer">
+        <div class="presentation-header">
+            <div class="presentation-header-content">
+                <h2 class="presentation-title">Strategic Vision Presentation</h2>
+                <div class="presentation-controls">
+                    <div class="slide-counter">
+                        <span id="currentSlide">1</span> / <span id="totalSlides">7</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="toggleFullscreen()">Fullscreen</button>
+                    <button class="btn btn-secondary" onclick="closePresentationViewer()">← Back</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="fullscreen-content">
+            <!-- Embedded presentation content from the original HTML -->
+            <div class="presentation-container" id="embeddedPresentation">
+                <!-- Slide 1: Title -->
+                <div class="slide active">
+                    <h1>ANTAGO GLOBAL</h1>
+                    <div class="luxury-divider"></div>
+                    <h2>Private Office Strategic Framework</h2>
+                    <p class="subtitle">Principal Capital. Strategic Partnerships. Global Excellence.</p>
+                    <div class="exclusivity-badge">Ultra-High-Net-Worth Platform</div>
+                    <p class="subtitle">The Evolution to Institutional-Scale Private Investment</p>
+                </div>
+
+                <!-- Slide 2: What We're Creating -->
+                <div class="slide">
+                    <h2>What We're Creating</h2>
+                    <div class="luxury-divider"></div>
+                    <p class="subtitle">A sophisticated private office deploying principal capital at institutional scale</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number">$3-5B</div>
+                            <div class="stat-label">Initial Capital Scale</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">$50M+</div>
+                            <div class="stat-label">Minimum Co-Investment</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">$5-10B</div>
+                            <div class="stat-label">Target by 2026</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Principal Capital Freedom</div>
+                        </div>
+                    </div>
+
+                    <p class="subtitle">Unlike traditional family offices or fund managers, we maintain complete operational independence while creating optionality for strategic partnerships on exceptional opportunities.</p>
+                </div>
+
+                <!-- Slide 3: Three-Pillar Framework -->
+                <div class="slide">
+                    <h2>Three-Pillar Strategic Framework</h2>
+                    <div class="luxury-divider"></div>
+                    
+                    <div class="pillars-container">
+                        <div class="pillar">
+                            <h4>Investment Platform</h4>
+                            <p>Principal Capital Excellence with Co-Investment Optionality. Deploy capital through concentrated, high-conviction investments while maintaining optionality for institutional partnerships.</p>
+                        </div>
+                        
+                        <div class="pillar">
+                            <h4>Family Enterprise</h4>
+                            <p>Governance Excellence & Multi-Generational Continuity. Ensure sustainable governance and wealth stewardship while maintaining platform credibility for institutional partnerships.</p>
+                        </div>
+                        
+                        <div class="pillar">
+                            <h4>Impact & Legacy</h4>
+                            <p>Strategic Influence & Network Development. Build global influence, strategic relationships, and sustainable impact while generating exceptional investment opportunities.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: The Exclusivity -->
+                <div class="slide">
+                    <h2>The Exclusivity</h2>
+                    <div class="luxury-divider"></div>
+                    <div class="exclusivity-badge">Top 1% of Global Finance</div>
+                    
+                    <div class="opportunity-grid">
+                        <div class="opportunity-card">
+                            <h5>Sovereign Fund Access</h5>
+                            <p>Direct partnerships with government investment vehicles seeking co-investment opportunities</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Ultra-HNW Family Offices</h5>
+                            <p>Elite network of institutional-approach family offices for strategic partnerships</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Pension Fund Partnerships</h5>
+                            <p>Large institutional investors seeking alternative investment opportunities</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Strategic Corporations</h5>
+                            <p>Operating companies seeking investment diversification and strategic partnerships</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Global Network Leverage</h5>
+                            <p>Extensive relationships across investment, governance, and impact spheres worldwide</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Principal Capital Freedom</h5>
+                            <p>No external investor constraints or redemption pressure - true strategic flexibility</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 5: Implementation Timeline -->
+                <div class="slide">
+                    <h2>Implementation Roadmap</h2>
+                    <div class="luxury-divider"></div>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h6>Q3 2025</h6>
+                            <p>Foundation</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h6>Q4 2025</h6>
+                            <p>Partnership Development</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h6>Q1-Q2 2026</h6>
+                            <p>Execution Excellence</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h6>Q3-Q4 2026</h6>
+                            <p>Platform Optimization</p>
+                        </div>
+                    </div>
+
+                    <div class="pillars-container">
+                        <div class="pillar">
+                            <h4>Foundation</h4>
+                            <p>Team development, system implementation, network activation, legal framework establishment</p>
+                        </div>
+                        
+                        <div class="pillar">
+                            <h4>Partnership Development</h4>
+                            <p>Partner identification, relationship building, deal pipeline development, platform optimization</p>
+                        </div>
+                        
+                        <div class="pillar">
+                            <h4>Execution Excellence</h4>
+                            <p>First co-investment execution, partnership expansion, scale development for $100M+ transactions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 6: Your Opportunity -->
+                <div class="slide">
+                    <h2>Your Opportunity</h2>
+                    <div class="luxury-divider"></div>
+                    <p class="subtitle">For those who've been part of this journey for 10-15 years</p>
+                    
+                    <div class="opportunity-grid">
+                        <div class="opportunity-card">
+                            <h5>Leadership Roles</h5>
+                            <p>Senior investment directors, portfolio managers, regional directors across global operations</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Co-Investment Participation</h5>
+                            <p>Direct participation in $50M+ deals alongside institutional partners</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Global Expansion</h5>
+                            <p>Lead operations in key financial centers across MENA, Europe, Asia, Africa</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Network Access</h5>
+                            <p>Elite global ecosystem typically reserved for ultra-high-net-worth families</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Legacy Building</h5>
+                            <p>Operate at the absolute apex of global finance while maintaining core values</p>
+                        </div>
+                        
+                        <div class="opportunity-card">
+                            <h5>Multi-Generational Platform</h5>
+                            <p>Build something that lasts decades, not just investment cycles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 7: The Vision -->
+                <div class="slide">
+                    <h2>The Vision Realized</h2>
+                    <div class="luxury-divider"></div>
+                    <p class="subtitle">This is legacy-building territory</p>
+                    
+                    <div class="cta-section">
+                        <h4>Strategic Outcome</h4>
+                        <p class="subtitle">A sophisticated private office platform that deploys principal capital excellently while creating systematic access to institutional-scale co-investment opportunities through global network leverage.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number">∞</div>
+                            <div class="stat-label">Investment Horizon</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">100+</div>
+                            <div class="stat-label">Institutional Relationships</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">Global</div>
+                            <div class="stat-label">Market Access</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">Elite</div>
+                            <div class="stat-label">Network Tier</div>
+                        </div>
+                    </div>
+
+                    <p class="subtitle"><strong>Principal Capital. Strategic Partnerships. Global Excellence.</strong></p>
+                    <div class="exclusivity-badge">Welcome to the Apex</div>
+                </div>
+
+                <div class="navigation">
+                    <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                    <button class="nav-btn" onclick="nextSlide()">Next →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Library -->
+    <div class="document-library" id="documentLibrary">
+        <div class="library-content">
+            <div class="library-header fade-in-up">
+                <h1>Strategic Document Library</h1>
+                <p class="subtitle">Confidential strategic frameworks and analysis documents</p>
+                <div class="luxury-divider"></div>
+                <button class="btn btn-secondary" onclick="closeDocumentLibrary()">← Back to Dashboard</button>
+            </div>
+            
+            <div class="documents-grid">
+                <div class="document-card fade-in-up">
+                    <h4>Private Office Strategic Framework</h4>
+                    <div class="document-meta">
+                        <span>📄 Strategy Document</span>
+                        <span>June 2025</span>
+                    </div>
+                    <p>Comprehensive framework for principal capital deployment through three-pillar strategic platform designed for institutional-scale investing with selective co-investment partnerships.</p>
+                    <button class="btn btn-primary">Access Document</button>
+                </div>
+                
+                <div class="document-card fade-in-up">
+                    <h4>Competitive Landscape Analysis</h4>
+                    <div class="document-meta">
+                        <span>📊 Market Analysis</span>
+                        <span>June 2025</span>
+                    </div>
+                    <p>Detailed positioning within global landscape of principal capital deployers, confirming top 1% market position and strategic advantages.</p>
+                    <button class="btn btn-primary">Access Document</button>
+                </div>
+                
+                <div class="document-card fade-in-up">
+                    <h4>Banking Strategy Framework</h4>
+                    <div class="document-meta">
+                        <span>🏦 Operational Strategy</span>
+                        <span>February 2025</span>
+                    </div>
+                    <p>Global banking infrastructure strategy across key financial centers to support institutional-scale operations and co-investment partnerships.</p>
+                    <button class="btn btn-primary">Access Document</button>
+                </div>
+                
+                <div class="document-card fade-in-up">
+                    <h4>Antago Finanz Global Structure</h4>
+                    <div class="document-meta">
+                        <span>📋 Implementation Plan</span>
+                        <span>February 2025</span>
+                    </div>
+                    <p>Comprehensive strategy for Global Fund, Family Office, and Foundation integration with Islamic finance principles and governance framework.</p>
+                    <button class="btn btn-primary">Access Document</button>
+                </div>
+                
+                <div class="document-card fade-in-up">
+                    <h4>Corporate Profile 2025</h4>
+                    <div class="document-meta">
+                        <span>📈 Corporate Overview</span>
+                        <span>2025</span>
+                    </div>
+                    <p>Official corporate profile outlining vision, mission, values, organizational structure, and investment model for stakeholder engagement.</p>
+                    <button class="btn btn-primary">Access Document</button>
+                </div>
+                
+                <div class="document-card fade-in-up">
+                    <h4>Executive Confidential Updates</h4>
+                    <div class="document-meta">
+                        <span>🔒 Confidential</span>
+                        <span>Ongoing</span>
+                    </div>
+                    <p>Regular strategic updates, partnership developments, and confidential market intelligence for executive leadership team only.</p>
+                    <button class="btn btn-primary">Access Updates</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication and Navigation
+        let isAuthenticated = false;
+        let currentSlideIndex = 0;
+        
+        // Simple authentication (replace with actual Zoho authentication)
+        const validCredentials = {
+            'exec1': 'antago2025',
+            'exec2': 'strategic2025',
+            'leadership': 'global2025'
+        };
+
+        // Handle sign-in
+        document.getElementById('signinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (validCredentials[username] === password) {
+                isAuthenticated = true;
+                showDashboard();
+                document.getElementById('userInfo').textContent = `Welcome, ${username.toUpperCase()}`;
+                document.getElementById('userMenu').classList.add('show');
+            } else {
+                alert('Invalid credentials. Please contact administrator.');
+            }
+        });
+
+        // Navigation functions
+        function showDashboard() {
+            document.getElementById('signinPage').style.display = 'none';
+            document.getElementById('dashboard').classList.add('show');
+            document.getElementById('presentationViewer').classList.remove('show');
+            document.getElementById('documentLibrary').classList.remove('show');
+        }
+
+        function showPresentation() {
+            document.getElementById('dashboard').classList.remove('show');
+            document.getElementById('presentationViewer').classList.add('show');
+            document.getElementById('documentLibrary').classList.remove('show');
+            initializePresentation();
+        }
+
+        function showDocuments() {
+            document.getElementById('dashboard').classList.remove('show');
+            document.getElementById('presentationViewer').classList.remove('show');
+            document.getElementById('documentLibrary').classList.add('show');
+        }
+
+        function showAnalytics() {
+            alert('Market Analytics module will be available in the next update.');
+        }
+
+        function showNetworking() {
+            alert('Network Platform module will be available in the next update.');
+        }
+
+        function closePresentationViewer() {
+            showDashboard();
+        }
+
+        function closeDocumentLibrary() {
+            showDashboard();
+        }
+
+        function signOut() {
+            isAuthenticated = false;
+            document.getElementById('signinPage').style.display = 'flex';
+            document.getElementById('dashboard').classList.remove('show');
+            document.getElementById('presentationViewer').classList.remove('show');
+            document.getElementById('documentLibrary').classList.remove('show');
+            document.getElementById('userMenu').classList.remove('show');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Presentation functionality
+        function initializePresentation() {
+            const slides = document.querySelectorAll('#embeddedPresentation .slide');
+            document.getElementById('totalSlides').textContent = slides.length;
+            showSlide(0);
+        }
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('#embeddedPresentation .slide');
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            document.getElementById('currentSlide').textContent = index + 1;
+            currentSlideIndex = index;
+        }
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('#embeddedPresentation .slide');
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            showSlide(currentSlideIndex);
+        }
+
+        function previousSlide() {
+            const slides = document.querySelectorAll('#embeddedPresentation .slide');
+            currentSlideIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+            showSlide(currentSlideIndex);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Keyboard navigation for presentation
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('presentationViewer').classList.contains('show')) {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    previousSlide();
+                } else if (e.key === 'Escape') {
+                    closePresentationViewer();
+                }
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            if (document.getElementById('presentationViewer').classList.contains('show')) {
+                handleSwipe();
+            }
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousSlide();
+            }
+        }
+
+        // Add presentation styles
+        const presentationStyles = `
+            .presentation-container .slide {
+                width: 100%;
+                min-height: 70vh;
+                padding: 40px 20px;
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                background: var(--white);
+                border-radius: 12px;
+                margin-bottom: 20px;
+                box-shadow: var(--shadow-medium);
+            }
+
+            .presentation-container .slide.active {
+                display: flex;
+            }
+
+            .presentation-container h1 {
+                font-size: 3rem;
+                font-weight: 300;
+                margin-bottom: 30px;
+                background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-gold) 50%, var(--primary-dark) 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .presentation-container h2 {
+                font-size: 2.2rem;
+                font-weight: 300;
+                margin-bottom: 30px;
+                color: var(--primary-dark);
+            }
+
+            .presentation-container .subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 30px;
+                color: var(--secondary-gray);
+                max-width: 800px;
+            }
+
+            .presentation-container .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 20px;
+                margin: 30px 0;
+                max-width: 900px;
+                width: 100%;
+            }
+
+            .presentation-container .stat-box {
+                background: rgba(255, 255, 255, 0.9);
+                padding: 25px 15px;
+                border: 2px solid rgba(212, 175, 55, 0.2);
+                border-radius: 8px;
+                box-shadow: var(--shadow-light);
+            }
+
+            .presentation-container .stat-number {
+                font-size: 2rem;
+                font-weight: 300;
+                color: var(--primary-gold);
+                margin-bottom: 10px;
+            }
+
+            .presentation-container .stat-label {
+                font-size: 0.85rem;
+                color: var(--secondary-gray);
+                font-weight: 500;
+                text-transform: uppercase;
+            }
+
+            .presentation-container .pillars-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin: 30px 0;
+                max-width: 1000px;
+                width: 100%;
+            }
+
+            .presentation-container .pillar {
+                background: rgba(255, 255, 255, 0.95);
+                padding: 30px 20px;
+                border: 2px solid rgba(212, 175, 55, 0.2);
+                border-radius: 8px;
+                box-shadow: var(--shadow-light);
+            }
+
+            .presentation-container .pillar h4 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+                color: var(--primary-gold);
+                font-weight: 500;
+            }
+
+            .presentation-container .opportunity-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 20px;
+                margin: 30px 0;
+                max-width: 900px;
+                width: 100%;
+            }
+
+            .presentation-container .opportunity-card {
+                background: rgba(255, 255, 255, 0.9);
+                padding: 20px 15px;
+                border: 2px solid rgba(212, 175, 55, 0.2);
+                border-radius: 8px;
+                box-shadow: var(--shadow-light);
+            }
+
+            .presentation-container .opportunity-card h5 {
+                font-size: 1rem;
+                margin-bottom: 10px;
+                color: var(--primary-gold);
+                font-weight: 500;
+            }
+
+            .presentation-container .timeline {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+                margin: 30px 0;
+                max-width: 700px;
+                width: 100%;
+            }
+
+            .presentation-container .timeline-item {
+                background: rgba(255, 255, 255, 0.95);
+                padding: 15px 10px;
+                border: 2px solid rgba(212, 175, 55, 0.2);
+                border-radius: 6px;
+                text-align: center;
+                box-shadow: var(--shadow-light);
+            }
+
+            .presentation-container .timeline-item h6 {
+                color: var(--primary-gold);
+                margin-bottom: 5px;
+                font-weight: 600;
+                font-size: 0.85rem;
+            }
+
+            .presentation-container .cta-section {
+                margin-top: 30px;
+                padding: 30px 25px;
+                background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+                border: 2px solid rgba(212, 175, 55, 0.3);
+                border-radius: 8px;
+                max-width: 700px;
+                width: 100%;
+            }
+
+            .presentation-container .cta-section h4 {
+                color: var(--primary-gold);
+                margin-bottom: 15px;
+                font-size: 1.3rem;
+                font-weight: 500;
+            }
+
+            .presentation-container .navigation {
+                position: static;
+                margin-top: 30px;
+                display: flex;
+                gap: 15px;
+                transform: none;
+            }
+
+            .presentation-container .nav-btn {
+                padding: 12px 25px;
+                background: var(--white);
+                border: 2px solid var(--primary-gold);
+                color: var(--primary-dark);
+                cursor: pointer;
+                border-radius: 6px;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-size: 0.8rem;
+                transition: all 0.3s ease;
+            }
+
+            .presentation-container .nav-btn:hover {
+                background: var(--primary-gold);
+                color: var(--primary-dark);
+            }
+
+            @media (max-width: 768px) {
+                .presentation-container h1 {
+                    font-size: 2.2rem;
+                }
+                
+                .presentation-container h2 {
+                    font-size: 1.8rem;
+                }
+                
+                .presentation-container .stats-grid,
+                .presentation-container .pillars-container,
+                .presentation-container .opportunity-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        `;
+
+        // Inject presentation styles
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = presentationStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
